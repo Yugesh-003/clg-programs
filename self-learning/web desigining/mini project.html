@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Hunter Quiz</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 24px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .quiz-container {
+      margin-bottom: 30px;
+    }
+    .question {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    .options label {
+      display: block;
+      font-size: 16px;
+      padding: 8px;
+      background-color: #f4f4f4;
+      margin-bottom: 8px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .options label:hover {
+      background-color: #ddd;
+    }
+    .progress-container {
+      margin-bottom: 15px;
+    }
+    progress {
+      width: 100%;
+      height: 20px;
+    }
+    .btn-group {
+      text-align: center;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      background-color: #e7ffe7;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #c3e6c3;
+    }
+  </style>
+</head>
+<body>
+
+  <header>Career Hunter Quiz</header>
+
+  <div class="container">
+    <div class="quiz-container">
+      <div class="progress-container">
+        <progress id="quiz-progress" value="0" max="100"></progress>
+        <p id="progress-text">Progress: 0%</p>
+      </div>
+      <form id="quiz">
+        <div id="quiz-content"></div>
+        <div class="btn-group">
+          <button type="button" id="previous-btn" onclick="navigateQuiz('previous')">Previous</button>
+          <button type="button" id="next-btn" onclick="navigateQuiz('next')">Next</button>
+          <button type="button" id="submit-btn" onclick="submitQuiz()">Submit</button>
+          <button type="button" id="reset-btn" onclick="resetQuiz()">Reset</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="result" class="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    const careerDetails = {
+      STEM: {
+        description: "STEM careers are focused on fields such as Science, Technology, Engineering, and Mathematics.",
+        examples: ["Software Engineer", "Data Scientist", "Biologist"],
+        skills: ["Problem-solving", "Technical knowledge", "Critical thinking"],
+      },
+      Creative: {
+        description: "Creative careers involve roles that require artistic expression and innovative thinking.",
+        examples: ["Graphic Designer", "Writer", "Animator"],
+        skills: ["Artistic ability", "Creativity", "Communication"],
+      },
+      Analytical: {
+        description: "Analytical careers focus on data analysis, financial analysis, and logical thinking.",
+        examples: ["Data Analyst", "Financial Analyst", "Statistician"],
+        skills: ["Data interpretation", "Problem-solving", "Statistical analysis"],
+      },
+      Social: {
+        description: "Social careers involve helping people, often in healthcare, teaching, or social services.",
+        examples: ["Teacher", "Social Worker", "Healthcare Worker"],
+        skills: ["Empathy", "Communication", "Patience"],
+      },
+      Managerial: {
+        description: "Managerial careers involve overseeing operations, leading teams, and making strategic decisions.",
+        examples: ["Project Manager", "Business Consultant", "HR Manager"],
+        skills: ["Leadership", "Organization", "Decision-making"],
+      },
+    };
+
+    // 10 mini questions focusing on specific preferences
+    const questions = [
+      {
+        question: "Which activity do you find most enjoyable?",
+        options: { a: "Solving problems", b: "Creating designs", c: "Analyzing patterns", d: "Helping others", e: "Leading a team" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "What skill do you prefer to develop?",
+        options: { a: "Programming", b: "Artistic expression", c: "Data analysis", d: "Teaching or helping", e: "Managing projects" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "What type of work environment excites you?",
+        options: { a: "Tech labs or scientific research", b: "Creative studios", c: "Financial offices", d: "Hospitals or schools", e: "Corporate offices" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "Which of these tasks would you prefer?",
+        options: { a: "Problem-solving with technology", b: "Designing new concepts", c: "Interpreting data", d: "Assisting people", e: "Organizing projects" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "In a group project, which role would you take?",
+        options: { a: "Technical expert", b: "Creative lead", c: "Data handler", d: "Mediator or helper", e: "Project manager" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "Do you prefer working independently or with a team?",
+        options: { a: "Independently", b: "With a team", c: "Both" },
+        points: { a: "STEM", b: "Social", c: "Managerial" }
+      },
+      {
+        question: "Which of these tools do you enjoy using most?",
+        options: { a: "Coding software", b: "Design software", c: "Spreadsheets", d: "Medical equipment", e: "Project management tools" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "How do you like solving problems?",
+        options: { a: "With logical reasoning", b: "By brainstorming ideas", c: "With data and facts", d: "By helping others", e: "By organizing solutions" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "What is your preferred work pace?",
+        options: { a: "Fast-paced and technical", b: "Creative and flexible", c: "Structured and data-driven", d: "Slow and patient", e: "Strategic and organized" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      },
+      {
+        question: "Which of the following do you enjoy the most?",
+        options: { a: "Exploring new tech", b: "Art and design", c: "Analyzing market trends", d: "Helping people", e: "Managing resources" },
+        points: { a: "STEM", b: "Creative", c: "Analytical", d: "Social", e: "Managerial" }
+      }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Render the quiz
+    function renderQuiz() {
+      const quizContainer = document.getElementById("quiz-content");
+      const q = questions[currentQuestionIndex];
+      const questionHTML = `
+        <div class="question">${currentQuestionIndex + 1}. ${q.question}</div>
+        <div class="options">
+          ${Object.entries(q.options)
+            .map(
+              ([key, value]) => 
+                <label><input type="checkbox" name="q${currentQuestionIndex}" value="${key}"> ${value}</label>
+            )
+            .join("")}
+        </div>
+      ;
+      quizContainer.innerHTML = questionHTML;
+      updateProgress();
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const progress = (currentQuestionIndex / questions.length) * 100;
+      document.getElementById("quiz-progress").value = progress;
+      document.getElementById("progress-text").textContent = Progress: ${Math.round(progress)}%;
+    }
+
+    // Navigation
+    function navigateQuiz(direction) {
+      if (direction === 'next' && currentQuestionIndex < questions.length - 1) {
+        currentQuestionIndex++;
+      } else if (direction === 'previous' && currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+      }
+      renderQuiz();
+    }
+
+    // Submit quiz
+    function submitQuiz() {
+      const resultCount = { STEM: 0, Creative: 0, Analytical: 0, Social: 0, Managerial: 0 };
+
+      questions.forEach((q, index) => {
+        const selected = document.querySelectorAll(input[name="q${index}"]:checked);
+        selected.forEach(option => {
+          const category = q.points[option.value];
+          resultCount[category]++;
+        });
+      });
+
+      const maxCategory = Object.keys(resultCount).reduce((a, b) => resultCount[a] > resultCount[b] ? a : b);
+
+      const resultHTML = `
+        Based on your answers, your most suitable career path is in the <strong>${maxCategory}</strong> field.
+        <h3>Description:</h3>
+        <p>${careerDetails[maxCategory].description}</p>
+        <h3>Example Careers:</h3>
+        <ul>
+          ${careerDetails[maxCategory].examples.map(career => <li>${career}</li>).join("")}
+        </ul>
+        <h3>Skills Needed:</h3>
+        <ul>
+          ${careerDetails[maxCategory].skills.map(skill => <li>${skill}</li>).join("")}
+        </ul>
+      `;
+      document.getElementById("result").innerHTML = resultHTML;
+      document.getElementById("result").style.display = "block";
+    }
+
+    // Reset quiz
+    function resetQuiz() {
+      currentQuestionIndex = 0;
+      renderQuiz();
+      document.getElementById("result").style.display = "none";
+    }
+
+    // Initialize quiz
+    window.onload = renderQuiz;
+  </script>
+</body>
+</html>
