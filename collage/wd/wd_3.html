@@ -3,24 +3,6 @@
   <head>
     <center><h1>Four frames</h1></center>
     <style>
-      .container {
-        display: flex;
-      }
-      .div1,
-      .div2,
-      .div3 {
-        height: 200px;
-        width: 200px;
-        border: 1px solid;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .div4 {
-        border: 1px solid;
-        height: 100px;
-        width: 100%;
-        margin-top: 20px;
-      }
       table,
       th,
       td {
@@ -34,45 +16,62 @@
       }
       td {
         padding-right: 10px;
-        padding-left: 3px;
+        padding-left: 6px;
+      }
+      img {
+        width: 250px;
+        padding: 5px;
+        float: right;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="div1">
-        <h3 style="margin:0; text-align: center;">Picture</h3>
-        <img src="beluga.jpeg" alt="cat" width="200px" height="180px" />
-      </div>
-
-      <div class="div2">
-        <center>
-          <h3>Table</h3>
-          <table>
-            <th>Name</th>
-            <th>Mark</th>
-            <tr>
-              <td>Yugesh</td>
-              <td>99</td>
-            </tr>
-            <tr>
-              <td>Gayathri</td>
-              <td>100</td>
-            </tr>
-          </table>
-        </center>
-      </div>
-      <div class="div3">
-        <center><h3>Hyper link</h3></center>
-        <p style="padding: 5px;">
-          Click
-          <a href="https://youtu.be/dQw4w9WgXcQ?si=Vv62ygxNt2RhxWb-">here</a> to
-          google.
-        </p>
-      </div>
-    </div>
-    <div class="div4">
-      <p>So this is how i done this excersice</p>
-    </div>
+    <p>
+      <img src="cat.jpg" alt="cat pic" />
+      Lorem ipsum dolor sit amet
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">consectetur</a>,
+      adipisicing elit. Cum est tempora qui dolores veritatis sequi, ipsa enim!
+      Adipisci a accusamus sunt ea. Consequatur nesciunt ad blanditiis sapiente
+      perspiciatis quaerat quae! Lorem ipsum dolor sit amet consectetur,
+      adipisicing elit. Cum est tempora qui dolores veritatis sequi, ipsa enim!
+      Adipisci a accusamus sunt ea. Consequatur nesciunt ad blanditiis sapiente
+      perspiciatis quaerat quae! Lorem ipsum dolor sit amet consectetur,
+      <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">adipisicing</a>
+      elit. Cum est tempora qui dolores veritatis sequi, ipsa enim! Adipisci a
+      accusamus sunt ea. Consequatur nesciunt ad blanditiis sapiente
+      perspiciatis quaerat quae!
+    </p>
+    <h3>Table</h3>
+    <table>
+      <th>Type</th>
+      <th>Mutability</th>
+      <th>Description</th>
+      <th>Syntax example</th>
+      <tr>
+        <td>bool</td>
+        <td>immutable</td>
+        <td>Boolean value</td>
+        <td>
+          <pre>
+True
+False
+</pre
+          >
+        </td>
+      </tr>
+      <tr>
+        <td>bytearray</td>
+        <td>mutable</td>
+        <td>Sequence of byte</td>
+        <td>
+          <pre>
+bytearray(b'Some ASCII')
+bytearray(b"Some ASCII")
+bytearray([10,20,30])
+</pre
+          >
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
